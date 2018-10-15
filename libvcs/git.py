@@ -187,7 +187,7 @@ class GitRepo(BaseRepo):
         try:
             error_code = 0
             tag_sha = self.run(['rev-list', '--max-count=1',
-                git_remote_name + '/' + git_tag if is_remote_ref else git_tag])
+                git_remote_name + '/' + git_tag if is_remote_ref else git_tag], stderr_in_output=False)
         except exc.CommandError as e:
             error_code = e.returncode
             tag_sha = ""

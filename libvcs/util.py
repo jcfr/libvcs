@@ -118,6 +118,7 @@ def run(
     shell=False,
     cwd=None,
     log_in_real_time=True,
+    stderr_in_output=True,
     check_returncode=True,
     callback=None,
 ):
@@ -135,6 +136,8 @@ def run(
     :type cwd: str
     :param log_in_real_time: boolean indicating whether to read stdout from the
         subprocess in real time instead of when the process finishes.
+    :param stderr_in_output: boolean indicating whether stderr should be appended
+        to the output string.
     :param check_returncode: Indicate whether a :exc:`~exc.CommandError`
         should be raised if return code is different from 0.
     :type check_returncode: :class:`bool`
@@ -167,7 +170,7 @@ def run(
 
         # output = console_to_str(proc.stdout.readline())
         # all_output.append(output)
-        if callback and callable(callback):
+        if callback and callable(callback) and stderr_in_output:
             line = console_to_str(proc.stderr.read(128))
             if line:
                 callback(output=line, timestamp=datetime.datetime.now())
@@ -176,7 +179,7 @@ def run(
 
     lines = filter(None, (line.strip() for line in proc.stdout.readlines()))
     all_output = console_to_str(b'\n'.join(lines))
-    if code:
+    if code and stderr_in_output:
         stderr_lines = filter(None, (line.strip() for line in proc.stderr.readlines()))
         all_output = console_to_str(b''.join(stderr_lines))
     output = ''.join(all_output)

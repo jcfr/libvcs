@@ -75,6 +75,7 @@ class BaseRepo(RepoLoggingAdapter, object):
         cwd=None,
         check_returncode=True,
         log_in_real_time=None,
+        stderr_in_output=True,
         *args,
         **kwargs
     ):
@@ -89,6 +90,10 @@ class BaseRepo(RepoLoggingAdapter, object):
         :param check_returncode: Indicate whether a :exc:`~exc.CommandError`
             should be raised if return code is different from 0.
         :type check_returncode: :class:`bool`
+
+        :param stderr_in_output: Indicate whether stderr should be appended to
+            the output string.
+        :type stderr_in_output: :class:`bool`
 
         :returns: combined stdout/stderr in a big string, newlines retained
         :rtype: str
@@ -106,6 +111,7 @@ class BaseRepo(RepoLoggingAdapter, object):
             ),
             check_returncode=check_returncode,
             log_in_real_time=log_in_real_time or self.log_in_real_time,
+            stderr_in_output=stderr_in_output,
             cwd=cwd,
         )
 
